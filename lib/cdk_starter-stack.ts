@@ -23,14 +23,25 @@ export class CdkStarterStack extends cdk.Stack {
       },
     });
 
-    //Create an S3 Bucket - L2
-    const myL2Bucket = new Bucket(this, "MyL2Bucket", {
-      lifecycleRules: [{ expiration: cdk.Duration.days(1) }],
+    //Define CloudFormation parameters - this will contrain the parameters on our deployment
+    const duration: cdk.CfnParameter = new cdk.CfnParameter(this, "duration", {
+      default: 6,
+      minValue: 1,
+      maxValue: 10,
+      type: "Number",
     });
 
-    new cdk.CfnOutput(this, "MyL2BucketName", { value: myL2Bucket.bucketName });
+    //Create an S3 Bucket - L2
+    const myL2Bucket: cdk.aws_s3.Bucket = new Bucket(this, "MyL2Bucket", {
+      lifecycleRules: [
+        { expiration: cdk.Duration.days(duration.valueAsNumber) },
+      ],
+    });
 
     //Create an S3 Bucket - L3
     new L3Bucket(this, "MyL3Bucket", 1);
+
+    //Log a resource name when deploying our CloudFormation stack
+    new cdk.CfnOutput(this, "MyL2BucketName", { value: myL2Bucket.bucketName });
   }
 }
