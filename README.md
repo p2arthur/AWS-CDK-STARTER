@@ -28,10 +28,6 @@ bin/cdk-starter.ts: The entry point for CDK app.
 cdk.json: Configuration file for CDK app.
 package.json and package-lock.json: Node.js project configuration files.
 Usage
-To deploy the AWS CDK stack and create the S3 Buckets, run the following command:
-
-`cdk deploy`
-You will be prompted to confirm the deployment. Enter y to proceed.
 
 ## Configuration
 
@@ -41,12 +37,14 @@ This project includes a CloudFormation parameter named duration which constrains
 
 ### CloudFormation Output
 
+There are two different stacks being created:
+PhotosStack and PhotosHandlerStack:
+
+PhotosStack: Creates the photos-bucket S3 Bucket - Outputs Bucket reference
+
+PhotosHandlerStack: Imports Bucket reference and executes a lambda function
+
 A CloudFormation output named MyL2BucketName is defined in the stack. It logs the name of the MyL2Bucket when the stack is deployed. You can access this value after deployment.
-
-### Cleanup
-
-To remove the deployed stack and resources, run:
-`cdk destroy`
 
 ### Author
 
